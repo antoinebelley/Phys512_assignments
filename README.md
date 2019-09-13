@@ -1,0 +1,1 @@
+Each assignments is placed in its own folder.

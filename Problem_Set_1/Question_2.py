@@ -20,7 +20,8 @@ df = df[::-1] #reindex the data set so that we have the voltage in increasing or
 df['deriv'] = (-1/(0.001*df['deriv']))
 
 #We use scipy.interpolate to interpolate a cubic 
-f = interp1d(df['V'], df['T'], kind = 'cubic')
+f = interp1d(df['V'], df['T'], kind = 'cubic', bounds_error = False, fill_value = 'extrapolate')
+#We use extrapolate only to be able to take the derivative on the full range
 
 
 #Generate an array spanning the range of the values of T with 1000 points
@@ -30,7 +31,7 @@ x = np.linspace(df['V'][len(df['V'])-1], df['V'].tail(1), 1000)
 def interpolation(V):
     """Print the interpolated voltage for a certain T
     -Arguments: -T (float) Temperature at which we want to interpolate"""
-    print(f'The temperature at {V} pm {error_cubic(V)} volts is of {f(V)} Kelvin.')
+    print(f'The temperature at {V} volts is of {f(V)} pm {error_cubic(V)} Kelvin.')
 
 
 def plot_interpolation(x):
@@ -69,14 +70,14 @@ def error_cubic(V):
     # We then find the distance from the closest point and multiply it to the difference of the two derrivatives
     deriv = []
     steps = []
-    for i in df['V'][1:-1]:    
+    for i in df['V']:    
         fp = derivative(f,i,1e-4)
         deriv.append(fp)
-    closest_V = df.iloc[(df['V']-V).abs().argsort()[:1]]
+    closest_V = df.iloc[(df['V'][1:-1]-V).abs().argsort()[:1]]
     closest_V =float(closest_V['V'])
-    index_V = df['V'][df['V']==closest_V].index[0]
+    index_V = df['V'][1:-1][df['V']==closest_V].index[0]
     deriv = -np.array(deriv)
-    error_dx = np.abs(deriv-df['deriv'][1:-1])[index_V]*np.absolute(closest_V-V)
+    error_dx = np.abs(deriv-df['deriv'])[index_V]*np.absolute(closest_V-V)
     return error_dx
 
 

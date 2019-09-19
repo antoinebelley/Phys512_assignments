@@ -1,1 +1,3 @@
-Each assignments is placed in its own folder.
+Each assignments is placed in its own folder. 
+
+WARNING: TO BE ABLE TO RUN THE CODES YOU WILL NEED PYTHON 3.6 OR HIGHER DUE TO THE USE OF F-STRINGS.

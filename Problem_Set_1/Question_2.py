@@ -17,7 +17,7 @@ df = df[::-1] #reindex the data set so that we have the voltage in increasing or
 
 #The derivative is given in mV/K so we need to mutiply the value by 0.001 to keep
 #the untis consitstent
-df['deriv'] = (-1/(0.001*df['deriv']))
+df['deriv'] = (1/(0.001*df['deriv']))
 
 #We use scipy.interpolate to interpolate a cubic 
 f = interp1d(df['V'], df['T'], kind = 'cubic', bounds_error = False, fill_value = 'extrapolate')
@@ -76,7 +76,7 @@ def error_cubic(V):
     closest_V = df.iloc[(df['V'][1:-1]-V).abs().argsort()[:1]]
     closest_V =float(closest_V['V'])
     index_V = df['V'][1:-1][df['V']==closest_V].index[0]
-    deriv = -np.array(deriv)
+    deriv = np.array(deriv)
     error_dx = np.abs(deriv-df['deriv'])[index_V]*np.absolute(closest_V-V)
     return error_dx
 

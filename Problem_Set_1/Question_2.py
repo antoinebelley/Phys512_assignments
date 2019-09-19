@@ -4,7 +4,7 @@
 #14/09/19
 #Requires python 3.6 or higher due to the use of f-string
 
-from scipy.interpolate import CubicHermiteSpline, interp1d
+from scipy.interpolate import interp1d
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,11 +17,12 @@ df = df[::-1] #reindex the data set so that we have the voltage in increasing or
 
 #The derivative is given in mV/K so we need to mutiply the value by 0.001 to keep
 #the untis consitstent
-df['deriv'] = (-1/(0.001*df['deriv']))
+df['deriv'] = (1/(0.001*df['deriv']))
 
 #We use scipy.interpolate to interpolate a cubic 
 f = interp1d(df['V'], df['T'], kind = 'cubic', bounds_error = False, fill_value = 'extrapolate')
 #We use extrapolate only to be able to take the derivative on the full range
+#This is in no way a good way to extrapolate the data...
 
 
 #Generate an array spanning the range of the values of T with 1000 points
@@ -65,7 +66,6 @@ def error_cubic(V):
         fp = 8.0*(function(x+dx)-function(x-dx)) - (function(x+2.0*dx)-function(x-2.0*dx))
         fp /= 12.0*dx
         return fp
-    
     # To estimate the error we compare the derivative of our function to the one of our interpolation
     # We then find the distance from the closest point and multiply it to the difference of the two derrivatives
     deriv = []
@@ -76,11 +76,11 @@ def error_cubic(V):
     closest_V = df.iloc[(df['V'][1:-1]-V).abs().argsort()[:1]]
     closest_V =float(closest_V['V'])
     index_V = df['V'][1:-1][df['V']==closest_V].index[0]
-    deriv = -np.array(deriv)
+    deriv = np.array(deriv)
     error_dx = np.abs(deriv-df['deriv'])[index_V]*np.absolute(closest_V-V)
     return error_dx
 
 
 plot_interpolation(x)
-interpolation (1)
+interpolation (0.3)
 

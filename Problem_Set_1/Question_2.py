@@ -82,5 +82,5 @@ def error_cubic(V):
 
 
 plot_interpolation(x)
-interpolation (0.3)
+interpolation (0.5)
 

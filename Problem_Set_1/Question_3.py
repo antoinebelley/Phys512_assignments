@@ -53,7 +53,7 @@ def test_integrals(funcs, a, b, tol=1e-7, nmax=1000):
         error = np.abs(integ - f[2](b)+f[2](a))
         print(f'The integral of {f[1]} from 1 to 5 converged to {integ} in {count} steps with an error of {error}.')
         print(f'The real value is of {f[2](b)-f[2](a)}')
-        print(f'We would need {6*count} funciton evaluation with the code we did in class but the "smart" way allows for only {2*count} function evaluation\n')
+        print(f'We would need {5*count} funciton evaluation with the code we did in class but the "smart" way allows for only {2*count} function evaluation\n')
     print()
 
 

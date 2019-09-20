@@ -30,7 +30,7 @@ def simpson_rule_half(f, a, fa, b, fb):
     return integral, h, fh
 
 def adaptative_simpson_rule(f, a, fa, b, fb, guess, h, fh, tol, nmax, count=0):
-    """Estimatw of the error of the integral using 
+    """Estimate of the error of the integral using 
     |S(a,h)+S(h,b)-S(a,b)| < 15*epsilon
     Where [a,b] is our interval, S() is the value of the simspson rule
     and epsilon is our tolerance. If the error is smaller than the tolerance
@@ -40,7 +40,7 @@ def adaptative_simpson_rule(f, a, fa, b, fb, guess, h, fh, tol, nmax, count=0):
                 - fa:       (float)     Value of f at a
                 - b:        (float)     Upper bound of the integral
                 - fb:       (float)     Value of f at b
-                - guess:    (float)     Value of the integral given by Simpson's rule on whole interval
+                - guess:    (float)     Value of the integral given by Simpson's rule on whole interval. Actual guess for the integral.
                 - h:        (float)     Half-point of the interval
                 - fh:       (float)     Value of the function evaluated at the half-point
                 - tol:      (float)     Tolerrance on the precison of the result

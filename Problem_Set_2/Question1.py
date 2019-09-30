@@ -47,16 +47,6 @@ def cheby_fit(x, y, order, tolerance):
             x_new[i] =  -1 + ((x[i] - x[0]) * 2 / (x[-1] - x[0]))
         return x_new
 
-    def unmap_x_range(x, a, b):
-        """Undo the mapping at the end to fit to the real range of x-values
-        - Arguments: - x     (array): Value of x mapped in (-1,1)
-                     - exp   (array): The needed exponent to reverse the mapping at the end
-        - Returns:   - x_new (array): The x-array of the data to map"""
-        x_new = np.zeros(len(x))
-        for i in range(len(x)):
-            x_new[i] =  a + (x[i] + 1) * (b-a)*0.5
-        return x_new
-
     
     def least_square_coeff(poly, y):
         """Makes a least-square fit to find the optimal coefficient for the fit 
@@ -69,11 +59,13 @@ def cheby_fit(x, y, order, tolerance):
         coeff = np.dot(np.linalg.inv(lhs), rhs)
         return coeff
 
+
     def coeff_tolerance(coeff, tol):
         """Picks the coeffs so that the error is in the tolerance
         -Arguments: coeff (array): The Chebyshev polynomials
                     tol   (array): The data to be fit
         -Returns  : max_coeff  (array): The expected values given by the fit"""
+        max_coeff = len(coeff)
         for i in range(len(coeff)):
             if np.absolute(coeff[i]) <= tol:
                 max_coeff = i
@@ -84,7 +76,6 @@ def cheby_fit(x, y, order, tolerance):
             print("Tolerance cannot be obatained at this order.")
             return len(coeff)
 
-    a,b =x[0],x[-1]
     x_new = map_x_range(x)
     polynomials = cheby_poly(x_new,order)
     coeff = least_square_coeff(polynomials,y)
@@ -92,7 +83,7 @@ def cheby_fit(x, y, order, tolerance):
     fit = np.dot(polynomials[:,:max_coeff], coeff[:max_coeff])
     return fit, max_coeff
     
-
+#Change this so that it works for any positive interval
 x = np.arange(0.5,1,1e-3)
 y = np.log2(x)
 fit, max_coeff = cheby_fit(x,y,50,1e-6)

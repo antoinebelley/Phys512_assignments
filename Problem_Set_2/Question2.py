@@ -133,9 +133,9 @@ print(f'The error on x0 is {perr[0]}, on b is {perr[1]} and on c is {perr[2]}')
 #################################Part d)#########################################
 print('\nPart d)')
 
-print('I wouldn\'t trust the errors too much since there seems to be')
-print('some correlation in the noise of the data. We should thus change our N matrix')
-print('to take that into consideration. However, it is still fair to assume that the error')
-print('wouldn\'t increase that much.')
+print('I wouldn\'t trust the errors  since there are')
+print('other peaks at which we could be looking at')
+print('so we cannot determine the errors well. Also,')
+print('there seems to be some correlated noise in the data.')
 
 

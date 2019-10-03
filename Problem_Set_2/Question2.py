@@ -46,7 +46,7 @@ print(f"We can use trial and error to find b ~ {b}.")
 guess = general_exp(x, p)
 plt.plot(x,y)
 plt.plot(x, guess)
-plt.show()
+plt.savefig('Question2a')
 
 
 ########################################Part b)##############################################################
@@ -99,7 +99,7 @@ plt.plot(x,y, label = 'Data')
 plt.plot(x,guess, label = 'Initial guess')
 plt.plot(x,general_exp(x,p_new), label = 'Newton\'s method fit')
 plt.legend()
-plt.show()
+plt.savefig('Question2b')
 
 print(f'The optimal parameters are x0 = {p_new[0]}, b = {p_new[1]} and c = {p_new[2]}')
 

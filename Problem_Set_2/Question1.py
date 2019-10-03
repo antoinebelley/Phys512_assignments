@@ -94,7 +94,7 @@ plt.plot(x,fit-y, label = 'Chebyshev')
 plt.plot(x,fit_lin-y, label = 'Polynomial')
 plt.legend()
 plt.title('Residual of the fits')
-plt.show()
+plt.savefig('Residuals')
 
 print(f'The maximum error for the Chebyshev fit is of {np.max(fit-y)} and the RMS is of {np.sqrt(np.mean((fit-y)**2))}')
 print(f'The maximum error for the polynomial fit is of {np.max(fit_lin-y)} and the RMS is of {np.sqrt(np.mean((fit_lin-y)**2))}')

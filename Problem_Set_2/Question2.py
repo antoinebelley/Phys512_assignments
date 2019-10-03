@@ -19,7 +19,7 @@ print('Part a)')
 def general_exp(x,p):
     """Return the general form of an exponential.
     -Arguments: -x       (array): The point at which we need to evaluate the function
-                -p       (array): The paramters for the exponential in the order [x0,a,b,c]
+                -p       (array): The paramters for the exponential in the order [x0,b,c]
     -Returns:   -func (function): The value of the exp of the form exp(-(x-x0)/b)+c evaluated at the x-values"""
     return np.exp(-(x-p[0])/p[1])+p[2]
 
@@ -56,7 +56,7 @@ print('\nPart b)')
 def grad_exp(x,p):
     """Return gradient of the general form of an exponential.
     -Arguments: -x     (array): The point at which we need to evaluate the function
-                -p     (array): The paramters for the exponential in the order [x0,a,b,c]
+                -p     (array): The paramters for the exponential in the order [x0,b,c]
     -Returns:   -guess (array): The value of the exp of the form a*exp(-(x-x0)/b)+c evaluated at the x-values
                 -grad  (array): Gradient of the fucntion (in the same order as the input parameters"""
     guess = general_exp(x,p)

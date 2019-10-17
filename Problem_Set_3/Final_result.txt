@@ -1,0 +1,4 @@
+QUESTION 1
+-----------
+The chi_squared is 1588.2376465826753.
+

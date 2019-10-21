@@ -30,19 +30,18 @@ def chi_squared(data, fit, error):
         chi_squared = np.sum((data-fit)**2/error**2)
         return chi_squared 
 
-x = np.arange(0,len(cmb),1)
-model = interp1d(x,cmb, kind = 'cubic')
 
-data = np.array(wmap[:,1])
+
 x = np.array(wmap[:,0])
-fit  = model(x)
+model = cmb[2:len(x)+2]
+data = wmap[:,1]
 error = np.array(wmap[:,2])
 
 
 f = open('Final_result.txt', 'w')
 f.write('QUESTION 1\n')
 f.write('-----------\n')
-f.write(f'The chi_squared is {chi_squared(data,fit, error)}.\n\n')
+f.write(f'The chi_squared is {chi_squared(data,model, error)}.\n\n')
 f.close()
 
 

@@ -2,3 +2,40 @@ QUESTION 1
 -----------
 The chi_squared is 1588.2376465826746.
 
+
+QUESTION 2
+-----------
+OPTIMIZATION WITH TAU FIX:
+Iteration 0: chi-squared = 1588.3060461022
+Iteration 1: chi-squared = 1234.805664566562
+Iteration 2: chi-squared = 1227.9319007801023
+Iteration 3: chi-squared = 1227.9308237307396
+Chi-Squared (1227.930827040247)  got bigger, increasing lambda!!!
+Iteration 4: chi-squared = 1227.9308237307396
+Chi-Squared (1227.9308271711684)  got bigger, increasing lambda!!!
+Iteration 5: chi-squared = 1227.9308237307396
+Chi-Squared (1227.9308263177622)  got bigger, increasing lambda!!!
+Iteration 6: chi-squared = 1227.9308237307396
+Chi-Squared (1227.930825139782)  got bigger, increasing lambda!!!
+Iteration 7: chi-squared = 1227.9308237307396
+Chi-Squared (1227.9308297185653)  got bigger, increasing lambda!!!
+Iteration 8: chi-squared = 1227.9308237307396
+Chi-Squared (1227.9308280977912)  got bigger, increasing lambda!!!
+Iteration 9: chi-squared = 1227.9308237307396
+The final chi-squared is 1227.9308236279448
+
+The final parameters are:
+	-H0    = 69.33152587868962 pm 3.666763726368569
+	-ombh2 = 0.022491133140528134 pm 0.0008511947920247626
+	-omch2 = 0.11389909622510146 pm 0.007035875947350926
+	-tau   = 0.05  pm 0.1493889560861017
+	-As    = 2.0423641550132866e-09 pm 5.936595954334649e-10
+	-ns    = 0.9697594349475691 pm 0.026187018416273532
+
+We see that the Newton gives decreasing value of chi-squared so the derivatives
+can be trusted!
+
+We see from looking at the covariance matrix that tau is not really correlated to
+the other parameters since its error is very big after updating the new parameters
+so floating tau would not really affect the errors of the other parameters.
+

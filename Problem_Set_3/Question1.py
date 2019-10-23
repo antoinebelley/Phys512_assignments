@@ -9,7 +9,6 @@
 
 
 import numpy as np
-from scipy.interpolate import interp1d
 from wmap_camb_example import cmb, wmap
 
 
@@ -30,19 +29,18 @@ def chi_squared(data, fit, error):
         chi_squared = np.sum((data-fit)**2/error**2)
         return chi_squared 
 
-
-
 x = np.array(wmap[:,0])
 model = cmb[2:len(x)+2]
 data = wmap[:,1]
 error = np.array(wmap[:,2])
-
 
 f = open('Final_result.txt', 'w')
 f.write('QUESTION 1\n')
 f.write('-----------\n')
 f.write(f'The chi_squared is {chi_squared(data,model, error)}.\n\n')
 f.close()
+
+
 
 
 

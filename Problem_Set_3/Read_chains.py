@@ -63,7 +63,7 @@ def gaussian(x,mu,sig, sample):
                   -sig    (real): Standard distribution of the distribution
                   -sample  (int): Number of sample in the distribution
        Returns:   -gauss (array): Returns the values of the gaussian evaluated at the points"""
-    return 1/(sig*np.sqrt(2*np.pi*sample*0.01))*np.exp(-0.5*((x-mu)/sig)**2)
+    return 1/(sig*np.sqrt(2*np.pi*sample))*np.exp(-0.5*((x-mu)/(sig)**2/sample))
 
 def prior_sample(file, burnin=500):
     """Take an importance sampling of the chains from question 3 wrt the experimental value of tau.
@@ -75,12 +75,10 @@ def prior_sample(file, burnin=500):
     params = chains[burnin:,]
     fit_params = np.zeros(6)
     err_params = np.zeros(6)
-    new_params = params.copy()
     for i in range(6):
-        new_params[:,i] =gaussian(params[:,3],0.0544,0.0073, len(params[:,3]))*params[:,i]
-        plt.show()
-        fit_params[i] = new_params[:,i].mean()
-        err_params[i] = new_params[:,i].std()/np.sqrt(len(params[:,3]))
+        weights = gaussian(params[:,3],0.0544,0.0073, len(params[:,3]))
+        fit_params[i] = np.average(params[:,i], weights=weights)    #Weighted average   
+        err_params[i] = np.sqrt(np.cov(params[:,i], aweights=weights))  #Weight error
     return fit_params, err_params
 
 
@@ -125,8 +123,10 @@ file.write(f'\t-omch2 = {prior_fit[2]} pm {prior_err[2]}\n')
 file.write(f'\t-tau   = {prior_fit[3]} pm {prior_err[3]}\n')
 file.write(f'\t-As    = {prior_fit[4]} pm {prior_err[4]}\n')
 file.write(f'\t-ns    = {prior_fit[5]} pm {prior_err[5]}\n\n')
-file.write('We see that the to results are really similar, and thus both methods are equivalent.\n')
-file.write('We also see that the error is smaller for the importance sampling.')
+file.write('We see that the to results are really similar but still have a slightly bigger tau.\n')
+file.write('We can see the effect of the importance sampling pulling the values of tau down towards the\n')
+file.write('real value, but it is still not all the way there')
+
 
 
 

@@ -47,6 +47,8 @@ file = open('chains_Question4.txt','w')
 count = 0
 for i in range(nstep):
     new_params=pars+take_step_cov(pcov)*scale_fac
+    #Adds the condition from the value of tau
+    #We consider the value inside 3 sigma to include 99.7% of the expected value
     if new_params[3]>tau_real-3*sigma and new_params[3]<tau_real+3*sigma:
       new_model=get_spectrum(new_params)[2:len(x)+2]
       new_chisq=np.sum((wmap[:,1]-new_model)**2/noise**2)

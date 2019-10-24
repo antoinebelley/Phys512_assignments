@@ -9,11 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-#We import the chains and remove the first 1000 points to remove the burnin
-
-
 def plot_chains(Question,file, burnin=500, FFT=False):
-    """
+    """Plots the Markov chains
+    -Arguments: -Question     (int): The number of the question to put in the names of the output files
+                -file      (string): Name of the file where the chain are saved
+                -burnin       (int): Number of points to remove before the chain converges. Default = 500.
+                -FFT         (bool): If true, plots the fft of the chains
+    -Returns:   -fit_params (array): The optimal parameters from the MCMC (Given by the mean of the chains)
+                -errors     (array): Error on the fir parameters. (Given by the std of the chains)
     """
 
     chains = np.loadtxt(file)
@@ -54,9 +57,20 @@ def plot_chains(Question,file, burnin=500, FFT=False):
     return fit_params,errors
 
 def gaussian(x,mu,sig, sample):
+    """Normalized gaussian for the importance sampling of the chain of question 3
+       Arguments: -x     (array): The point at which we evaluate the gaussian
+                  -mu     (real): Mean of the distribution
+                  -sig    (real): Standard distribution of the distribution
+                  -sample  (int): Number of sample in the distribution
+       Returns:   -gauss (array): Returns the values of the gaussian evaluated at the points"""
     return 1/(sig*np.sqrt(2*np.pi*sample*0.01))*np.exp(-0.5*((x-mu)/sig)**2)
 
 def prior_sample(file, burnin=500):
+    """Take an importance sampling of the chains from question 3 wrt the experimental value of tau.
+       Arguments: -file      (string): Name of the file of the chain that you want to importance sample
+                  -burnin       (int): Number of points to remove before the chain converges. Default = 500.
+       Returns:   -fit_params (array): The fit params from the MCMC after importance sampling
+                  -err_params (array): The errros of the parameters from the MCMC after importance sampling """
     chains = np.loadtxt(file)
     params = chains[burnin:,]
     fit_params = np.zeros(6)
@@ -69,9 +83,14 @@ def prior_sample(file, burnin=500):
         err_params[i] = new_params[:,i].std()/np.sqrt(len(params[:,3]))
     return fit_params, err_params
 
+
+#Make the plot for question 3 and 4
 pars, err = plot_chains(3,'chains_Question3.txt', FFT=True)
 pars2, err2 = plot_chains(4,'chains_Question4.txt')
+#Get the parameters and error after the prior sampling
+prior_fit, prior_err = prior_sample('chains_Question3.txt')
 
+#Write the final results in the summary file
 file = open('Final_result.txt', 'a')
 file.write('QUESTION 3\n')
 file.write('-----------\n')
@@ -97,7 +116,8 @@ file.write(f'\t-As    = {pars2[4]} pm {err2[4]}\n')
 file.write(f'\t-ns    = {pars2[5]} pm {err2[5]}\n\n')
 file.write('Note the we constraint sigma within 3-sigma since that includes 99.7% of the expected measurements\n\n')
 
-prior_fit, prior_err = prior_sample('chains_Question3.txt')
+
+
 file.write('The MCMC method when importance sample by a gaussian our result for question 3 give:\n')
 file.write(f'\t-H0    = {prior_fit[0]} pm {prior_err[0]}\n')
 file.write(f'\t-ombh2 = {prior_fit[1]} pm {prior_err[1]}\n')

@@ -34,6 +34,8 @@ def take_step_cov(covmat):
 x=wmap[:,0]
 pars=np.asarray([67,0.02,0.1,0.1,2e-9,0.96])
 
+
+#Code to run the markov chains
 nstep=5000
 npar=len(pars)
 noise = wmap[:,2]
@@ -41,7 +43,7 @@ chains=np.zeros([nstep,npar])
 chisq=np.sum((wmap[:,1]-get_spectrum(pars)[2:len(x)+2])**2/noise**2)
 scale_fac=0.5
 chisqvec_new=np.zeros(nstep)
-file = open('chains_Question3_2.txt','a')
+file = open('chains_Question3.txt','a')
 count = 0
 for i in range(nstep):
     new_params=pars+take_step_cov(pcov)*scale_fac

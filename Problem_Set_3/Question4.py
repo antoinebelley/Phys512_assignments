@@ -1,6 +1,6 @@
-#Question 3 of problem set 3 in phys 512
+#Question 4 of problem set 3 in phys 512
 #We want to optimize the parameters for the model
-#using a MCMC 
+#using a MCMC and restraining the value of tau
 #Author : Antoine Belley
 #Date:    17/10/2019
 #WARNING: needs python 3.6 or higher due to the use of f-strings
@@ -32,20 +32,22 @@ def take_step_cov(covmat):
     return np.dot(mychol,np.random.randn(covmat.shape[0]))
 
 x=wmap[:,0]
-pars=np.asarray([67,0.02,0.1,0.1,2e-9,0.96])
+pars=np.asarray([67,0.02,0.1,0.0544,2e-9,0.96])
 
 nstep=5000
+sigma=0.0073
+tau_real=0.0544
 npar=len(pars)
 noise = wmap[:,2]
 chains=np.zeros([nstep,npar])
 chisq=np.sum((wmap[:,1]-get_spectrum(pars)[2:len(x)+2])**2/noise**2)
 scale_fac=0.5
 chisqvec_new=np.zeros(nstep)
-file = open('chains_Question3_2.txt','a')
+file = open('chains_Question4.txt','w')
 count = 0
 for i in range(nstep):
     new_params=pars+take_step_cov(pcov)*scale_fac
-    if new_params[3]>0:
+    if new_params[3]>tau_real-3*sigma and new_params[3]<tau_real+3*sigma:
       new_model=get_spectrum(new_params)[2:len(x)+2]
       new_chisq=np.sum((wmap[:,1]-new_model)**2/noise**2)
       delta_chisq=new_chisq-chisq
@@ -63,4 +65,3 @@ for i in range(nstep):
     file.flush()
     chisqvec_new[i]=chisq
 file.close()  
-

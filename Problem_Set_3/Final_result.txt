@@ -39,3 +39,160 @@ We see from looking at the covariance matrix that tau is not really correlated t
 the other parameters since its error is very big after updating the new parameters
 so floating tau would not really affect the errors of the other parameters.
 
+
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+
+QUESTION 3
+-----------
+The MCMC method gives the following method:
+	-chisq = 1233.0782622114543
+	-H0    = 71.08257169369857
+	-ombh2 = 0.022824077022017043
+	-omch2 = 0.11079561388752286
+	-tau   = 0.0773564541146659
+	-As    = 2.147583091281294e-09
+	-ns    = 0.9802037212157635
+

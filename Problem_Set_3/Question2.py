@@ -12,8 +12,8 @@ from wmap_camb_example import wmap, get_spectrum
 import matplotlib.pyplot as plt
 
 file = open('Final_result.txt', 'a')
-print('QUESTION 2\n')
-print('-----------\n')
+file.write('QUESTION 2\n')
+file.write('-----------\n')
 
 
 def get_spectrum_fix(pars, lmax=1500):
@@ -24,7 +24,7 @@ def get_spectrum_fix(pars, lmax=1500):
     H0=pars[0]
     ombh2=pars[1]
     omch2=pars[2]
-    tau = 0.001
+    tau = 0.05
     As=pars[3]
     ns=pars[4]
     pars=camb.CAMBparams()
@@ -59,7 +59,7 @@ def gradient(data,fit,p):
 
 
 def newton_method_Levenberg(data,fit,p, error, iter_max = 100):
-    """Performs Levenberg-Marquardt's method to find the best fit. If chi_squared - chi_squared_new <1,
+    """Performs Levenberg-Marquardt's method to find the best fit. If chi_squared - chi_squared_new <0.001,
     stops the loop. If chi_squared>chi_squared new, increase lam to use grhadient descent for a few stpes. If chi_square gets
     better, reduces lam to proceed with Newton's method.  
     -Arguments: -data (array): Data point to fit
@@ -72,7 +72,7 @@ def newton_method_Levenberg(data,fit,p, error, iter_max = 100):
                 -perr (array): The error on the parameters
     NOTE: P MUST BE AN ARRAY EVEN IF YOU ONLY EVOLVE ONE PARAMETER!"""
     chi_squared = 10000 #Random big value for comparison
-    lam = 0.0001        #Smart value to begin with
+    lam = 0.0001        #Small value to begin with
     grad = gradient(data,fit,p)
     p_new = p.copy()
     for j in range(iter_max):
@@ -82,7 +82,7 @@ def newton_method_Levenberg(data,fit,p, error, iter_max = 100):
         if (chi_squared - chi_squared_new) < 0.001 and (chi_squared - chi_squared_new) > 0:
             #Stops loops if chi_squared - chi_squared_new <1
             p = p_new.copy()
-            print(f'The final chi-squared is {chi_squared_new}\n\n')
+            file.write(f'The final chi-squared is {chi_squared_new}\n\n')
             #Add back tau to include it in the covariance matrix
             p = np.insert(p,3,0.05)
             grad = gradient(data, get_spectrum,p)
@@ -94,7 +94,7 @@ def newton_method_Levenberg(data,fit,p, error, iter_max = 100):
             break
         elif chi_squared < chi_squared_new:
             #If step increases the chi_squared, increases lam to switch to gradient descent
-            print(f"Chi-Squared ({chi_squared_new})  got bigger, increasing lambda!!!\n")
+            file.write(f"Chi-Squared ({chi_squared_new})  got bigger, increasing lambda!!!\n")
             lam *= 1000
             p_new=p.copy()
         else:
@@ -111,31 +111,30 @@ def newton_method_Levenberg(data,fit,p, error, iter_max = 100):
         dp=np.linalg.inv(lhs)*(rhs)
         for jj in range(p.size):
             p_new[jj]=p_new[jj]+dp[jj]
-        print(f'Iteration {j}: chi-squared = {chi_squared}\n')
+        file.write(f'Iteration {j}: chi-squared = {chi_squared}\n')
     return p,pcov,perr 
 
 
 pars= np.asarray([65,0.02,0.1,2e-9,0.96])   #Initial values of the parameters without tau
-tau = np.array([0.001])                      #Initial value of tau      #Function with pars floating and tau fix
-print(f'OPTIMIZATION WITH TAU FIX:\n')
+tau = np.array([0.05])                      #Initial value of tau      
 pars,pcov,perr = newton_method_Levenberg(wmap[:,1], get_spectrum_fix, pars, wmap[:,2]) #Optimization with tau fix
 #Write the final parameters and their errors in the result file 
-print('The final parameters are:\n')
-print(f'\t-H0    = {pars[0]} pm {perr[0]}\n')
-print(f'\t-ombh2 = {pars[1]} pm {perr[1]}\n')
-print(f'\t-omch2 = {pars[2]} pm {perr[2]}\n')
-print(f'\t-tau   = {pars[3]}  pm {perr[3]}\n')
-print(f'\t-As    = {pars[4]} pm {perr[4]}\n')
-print(f'\t-ns    = {pars[5]} pm {perr[5]}\n\n')
+file.write('The final parameters are:\n')
+file.write(f'\t-H0    = {pars[0]} pm {perr[0]}\n')
+file.write(f'\t-ombh2 = {pars[1]} pm {perr[1]}\n')
+file.write(f'\t-omch2 = {pars[2]} pm {perr[2]}\n')
+file.write(f'\t-tau   = {pars[3]}  pm {perr[3]}\n')
+file.write(f'\t-As    = {pars[4]} pm {perr[4]}\n')
+file.write(f'\t-ns    = {pars[5]} pm {perr[5]}\n\n')
 
-print('We see that the Newton gives decreasing value of chi-squared so the derivatives\n')
-print('can be trusted!\n\n')
+file.write('We see that the Newton gives decreasing value of chi-squared so the derivatives\n')
+file.write('can be trusted!\n\n')
 
-print('We see from looking at the covariance matrix that tau is not really correlated to\n')
-print('the other parameters since its error is very big after updating the new parameters\n')
-print('so floating tau would not really affect the errors of the other parameters.\n\n')
+file.write('We see from looking at the covariance matrix that tau is not really correlated to\n')
+file.write('the other parameters since its error is very big after updating the new parameters\n')
+file.write('so floating tau would not really affect the error in tau.\n\n')
 
-print(pcov)
+file.write(pcov)
 
 
 

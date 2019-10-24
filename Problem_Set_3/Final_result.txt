@@ -32,7 +32,7 @@ The final parameters are:
 	-As    = 2.0423641550132866e-09 pm 5.936595954334649e-10
 	-ns    = 0.9697594349475691 pm 0.026187018416273532
 
-We see that the Newton gives decreasing value of chi-squared so the derivatives
+We see that the Newton gives decreasing value at a decreasing rate of chi-squared so the derivatives
 can be trusted!
 
 We see from looking at the covariance matrix that tau is not really correlated to
@@ -40,159 +40,39 @@ the other parameters since its error is very big after updating the new paramete
 so floating tau would not really affect the errors of the other parameters.
 
 
-
 QUESTION 3
 -----------
 The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
+	-H0    = 71.08257169369857 pm 2.9783627737809857
+	-ombh2 = 0.022824077022017043 pm 0.0007219787904508136
+	-omch2 = 0.11079561388752286 pm 0.005635747058842594
+	-tau   = 0.0773564541146659 pm 0.04587078178544999
+	-As    = 2.147583091281294e-09 pm 1.85871809024892e-10
+	-ns    = 0.9802037212157635 pm 0.019948266818180762
+
+We see that our chains have converged since we both the chains and the FFT of the chains look like white noise,
+as one can see from the files Question3_chains.pdf and Question3_chains_FFT.pdf.
 
 
-QUESTION 3
+QUESTION 4
 -----------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
+The MCMC method when constraining the value of tau gives the following method:
+	-H0    = 68.7147285258096 pm 2.3838457479271304
+	-ombh2 = 0.02241087628405906 pm 0.0004894834561242557
+	-omch2 = 0.11581621289893486 pm 0.0057023521292032114
+	-tau   = 0.05620158461128201 pm 0.012779516301626792
+	-As    = 2.085841284666965e-09 pm 6.944925835316943e-11
+	-ns    = 0.9685004275331246 pm 0.01202963737962408
 
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
+Note the we constraint sigma within 3-sigma since that includes 99.7% of the expected measurements
 
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
+The MCMC method when importance sample by a gaussian our result for question 3 give:
+	-H0    = 72.39222472811468 pm 2.3479320822933856
+	-ombh2 = 0.023402584679024896 pm 0.000757888542496071
+	-omch2 = 0.11748560232354703 pm 0.0038024343741435733
+	-tau   = 0.056972301591254035 pm 0.0018499615787993659
+	-As    = 2.137135333048416e-09 pm 6.916795857349496e-11
+	-ns    = 1.0083025295688046 pm 0.03265813460766709
 
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
-QUESTION 3
------------
-The MCMC method gives the following method:
-	-chisq = 1233.0782622114543
-	-H0    = 71.08257169369857
-	-ombh2 = 0.022824077022017043
-	-omch2 = 0.11079561388752286
-	-tau   = 0.0773564541146659
-	-As    = 2.147583091281294e-09
-	-ns    = 0.9802037212157635
-
+We see that the to results are really similar, and thus both methods are equivalent.
+We also see that the error is smaller for the importance sampling.

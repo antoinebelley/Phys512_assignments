@@ -12,167 +12,101 @@ import matplotlib.pyplot as plt
 #We import the chains and remove the first 1000 points to remove the burnin
 
 
-def plot_chains(Question,file, burnin=500):
+def plot_chains(Question,file, burnin=500, FFT=False):
+    """
+    """
 
     chains = np.loadtxt(file)
     params = chains[burnin:,]
 
-    H0    = chains[:,0]
-    ombh2 = chains[:,1]
-    omch2 = chains[:,2]
-    tau   = chains[:,3]
-    As    = chains[:,4]
-    ns    = chains[:,5]
-    chisq = chains[:,6]
 
-
+    names = ['H0', 'ombh2', 'omch2', 'tau', 'As', 'ns', 'chisq']
     fit_params=np.mean(params,axis=0)
+    errors = np.std(params,axis=0)
 
-    plt.clf()
-    plt.plot(H0)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
+    fig = plt.figure(figsize=(12,12), frameon=False)
+    fig.patch.set_visible(False)
+    plt.title(f'Chains of the question {Question}')
+    for i in range(len(names)):
+        ax = fig.add_subplot(len(names),1,i+1)
+        ax.plot(chains[:,i])
+        ax.axvspan(0,burnin,facecolor='r', alpha=0.5)
+        ax.set_ylabel(names[i])
+        ax.set_xlim(0,5000)
+        ax.axhline(fit_params[i], label=f'Average value = {fit_params[i]}', color='orange')
+        ax.legend(loc=1)
     plt.xlabel('Steps')
-    plt.ylabel('H0')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[0], label=f'Average value = {fit_params[0]}', color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_H0.pdf')
+    plt.savefig(f'Question{Question}_chains.pdf')
 
-    plt.clf()
-    plt.plot(ombh2)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
-    plt.xlabel('Steps')
-    plt.ylabel('ombh2')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[1], label=f'Average value = {fit_params[1]}', color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_ombh2.pdf')
+    if FFT==True:
+        fig = plt.figure(figsize=(12,12), frameon=False)
+        plt.title(f'FFT of the chains of the question {Question}')
+        for i in range(len(names)-1):
+            ax = fig.add_subplot(len(names)-1,1,i+1)
+            plt.plot(np.fft.rfft(chains[:,i]))
+            plt.axvspan(0,burnin,facecolor='r', alpha=0.5)
+            ax.set_ylabel(names[i])
+            ax.set_yscale('symlog')
+            ax.set_xscale('log')
+        plt.xlabel('Steps')
+        plt.savefig(f'Question{Question}_chains_FFT.pdf')        
 
-    plt.clf()
-    plt.plot(omch2)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
-    plt.xlabel('Steps')
-    plt.ylabel('omch2')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[2], label=f'Average value = {fit_params[2]}', color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_omch2.pdf')
+    return fit_params,errors
 
-    plt.clf()
-    plt.plot(tau)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
-    plt.xlabel('Steps')
-    plt.ylabel('tau')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[3], label=f'Average value = {fit_params[3]}', color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_tau.pdf')
+def gaussian(x,mu,sig, sample):
+    return 1/(sig*np.sqrt(2*np.pi*sample*0.01))*np.exp(-0.5*((x-mu)/sig)**2)
 
-    plt.clf()
-    plt.plot(As)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
-    plt.xlabel('Steps')
-    plt.ylabel('As')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[4], label=f'Average value = {fit_params[4]}', color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_As.pdf')
-
-    plt.clf()
-    plt.plot(ns)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
-    plt.xlabel('Steps')
-    plt.ylabel('ns')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[5], label=f'Average value = {fit_params[5]}',color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_ns.pdf')
-
-    plt.clf()
-    plt.plot(chisq)
-    plt.axvspan(0,burnin,facecolor='r', alpha=0.5, label='Burn-in')
-    plt.xlabel('Steps')
-    plt.ylabel('Chi-squared')
-    plt.xlim(0,5000)
-    plt.axhline(fit_params[6], label=f'Average value = {fit_params[6]}',color='orange')
-    plt.legend()
-    plt.savefig(f'Question{Question}_chain_chisq.pdf')
-
-    return fit_params
-
-def plot_fft_chains(Question, file, burnin=500):
+def prior_sample(file, burnin=500):
     chains = np.loadtxt(file)
-    H0    = np.fft.fft(chains[1:5000,0])
-    ombh2 = np.fft.fft(chains[1:5000,1])
-    omch2 = np.fft.fft(chains[1:5000,2])
-    tau   = np.fft.fft(chains[1:5000,3])
-    As    = np.fft.fft(chains[1:5000,4])
-    ns    = np.fft.fft(chains[1:5000,5])
-    plt.clf()
-    plt.plot(H0)
-    plt.xlabel('Steps')
-    plt.ylabel('FFT of H0')
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.xlim(0,5000)
-    plt.savefig(f'Question{Question}_chain_FFT_H0.pdf')
+    params = chains[burnin:,]
+    fit_params = np.zeros(6)
+    err_params = np.zeros(6)
+    new_params = params.copy()
+    for i in range(6):
+        new_params[:,i] =gaussian(params[:,3],0.0544,0.0073, len(params[:,3]))*params[:,i]
+        plt.show()
+        fit_params[i] = new_params[:,i].mean()
+        err_params[i] = new_params[:,i].std()/np.sqrt(len(params[:,3]))
+    return fit_params, err_params
 
-    plt.clf()
-    plt.plot(ombh2)
-    plt.xlabel('Steps')
-    plt.ylabel('FFT ofombh2')
-    plt.xlim(1,5000)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.savefig(f'Question{Question}_chain_FFT_ombh2.pdf')
+pars, err = plot_chains(3,'chains_Question3.txt', FFT=True)
+pars2, err2 = plot_chains(4,'chains_Question4.txt')
 
-    plt.clf()
-    plt.plot(omch2)
-    plt.xlabel('Steps')
-    plt.ylabel('FFT of omch2')
-    plt.xlim(1,5000)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.savefig(f'Question{Question}_chain_FFT_omch2.pdf')
-
-    plt.clf()
-    plt.plot(tau)
-    plt.xlabel('Steps')
-    plt.ylabel('FFT of tau')
-    plt.xlim(1,5000)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.savefig(f'Question{Question}_chain_FFT_tau.pdf')
-
-    plt.clf()
-    plt.plot(As)
-    plt.xlabel('Steps')
-    plt.ylabel('FFT of As')
-    plt.xlim(1,5000)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.savefig(f'Question{Question}_chain_FFT_As.pdf')
-
-    plt.clf()
-    plt.plot(ns)
-    plt.xlabel('Steps')
-    plt.ylabel('FFT of ns')
-    plt.xlim(1,5000)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.savefig(f'Question{Question}_chain_FFT_ns.pdf')
-
-pars = plot_chains(3,'chains_Question3.txt')
-pars2 = plot_chains(4,'chains_Question4.txt')
-plot_fft_chains(3, 'chains_Question3.txt')
 file = open('Final_result.txt', 'a')
 file.write('QUESTION 3\n')
 file.write('-----------\n')
 file.write('The MCMC method gives the following method:\n')
-file.write(f'\t-chisq = {pars[6]}\n')
-file.write(f'\t-H0    = {pars[0]}\n')
-file.write(f'\t-ombh2 = {pars[1]}\n')
-file.write(f'\t-omch2 = {pars[2]}\n')
-file.write(f'\t-tau   = {pars[3]}\n')
-file.write(f'\t-As    = {pars[4]}\n')
-file.write(f'\t-ns    = {pars[5]}\n\n')
+file.write(f'\t-H0    = {pars[0]} pm {err[0]}\n')
+file.write(f'\t-ombh2 = {pars[1]} pm {err[1]}\n')
+file.write(f'\t-omch2 = {pars[2]} pm {err[2]}\n')
+file.write(f'\t-tau   = {pars[3]} pm {err[3]}\n')
+file.write(f'\t-As    = {pars[4]} pm {err[4]}\n')
+file.write(f'\t-ns    = {pars[5]} pm {err[5]}\n\n')
+file.write(f'We see that our chains have converged since we both the chains and the FFT of the chains look like white noise,\n')
+file.write(f'as one can see from the files Question3_chains.pdf and Question3_chains_FFT.pdf.\n\n\n')
+
+
+file.write('QUESTION 4\n')
+file.write('-----------\n')
+file.write('The MCMC method when constraining the value of tau gives the following method:\n')
+file.write(f'\t-H0    = {pars2[0]} pm {err2[0]}\n')
+file.write(f'\t-ombh2 = {pars2[1]} pm {err2[1]}\n')
+file.write(f'\t-omch2 = {pars2[2]} pm {err2[2]}\n')
+file.write(f'\t-tau   = {pars2[3]} pm {err2[3]}\n')
+file.write(f'\t-As    = {pars2[4]} pm {err2[4]}\n')
+file.write(f'\t-ns    = {pars2[5]} pm {err2[5]}\n\n')
+file.write('Note the we constraint sigma within 3-sigma since that includes 99.7% of the expected measurements\n\n')
+
+prior_fit, prior_err = prior_sample('chains_Question3.txt')
+file.write('The MCMC method when importance sample by a gaussian our result for question 3 give:\n')
+file.write(f'\t-H0    = {prior_fit[0]} pm {prior_err[0]}\n')
+file.write(f'\t-ombh2 = {prior_fit[1]} pm {prior_err[1]}\n')
+file.write(f'\t-omch2 = {prior_fit[2]} pm {prior_err[2]}\n')
+file.write(f'\t-tau   = {prior_fit[3]} pm {prior_err[3]}\n')
+file.write(f'\t-As    = {prior_fit[4]} pm {prior_err[4]}\n')
+file.write(f'\t-ns    = {prior_fit[5]} pm {prior_err[5]}\n\n')
+file.write('We see that the to results are really similar, and thus both methods are equivalent.\n')
+file.write('We also see that the error is smaller for the importance sampling.')
+
+
+

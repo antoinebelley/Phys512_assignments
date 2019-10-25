@@ -67,12 +67,12 @@ The MCMC method when constraining the value of tau gives the following method:
 Note the we constraint sigma within 3-sigma since that includes 99.7% of the expected measurements
 
 The MCMC method when importance sample by a gaussian our result for question 3 give:
-	-H0    = 70.91286984981781 pm 2.911670508846446
-	-ombh2 = 0.02278801854572686 pm 0.0007087664885173222
-	-omch2 = 0.11107866323911729 pm 0.0055458683100517905
-	-tau   = 0.07300616937350146 pm 0.04545540351523541
-	-As    = 2.130308409834065e-09 pm 1.8438406146579915e-10
-	-ns    = 0.9790140918947432 pm 0.019507687386042905
+	-H0    = 71.06963961506077 pm 2.971594548581952
+	-ombh2 = 0.022821454984091057 pm 0.0007205800958878016
+	-omch2 = 0.1108173868620659 pm 0.005626716713776828
+	-tau   = 0.07712705498565647 pm 0.045757962640190934
+	-As    = 2.1466805992463513e-09 pm 1.8545576074192474e-10
+	-ns    = 0.9801175187009418 pm 0.019904609080907954
 
 We see that the to results are really similar but still have a slightly bigger tau.
 We can see the effect of the importance sampling pulling the values of tau down towards the

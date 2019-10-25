@@ -63,7 +63,7 @@ def gaussian(x,mu,sig, sample):
                   -sig    (real): Standard distribution of the distribution
                   -sample  (int): Number of sample in the distribution
        Returns:   -gauss (array): Returns the values of the gaussian evaluated at the points"""
-    return 1/(sig*np.sqrt(2*np.pi*sample))*np.exp(-0.5*((x-mu)/(sig)**2/sample))
+    return 1/(sig*np.sqrt(2*np.pi*sample))*np.exp(-0.5*((x-mu)**2/(sig)**2/sample))
 
 def prior_sample(file, burnin=500):
     """Take an importance sampling of the chains from question 3 wrt the experimental value of tau.

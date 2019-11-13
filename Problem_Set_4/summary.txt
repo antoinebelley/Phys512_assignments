@@ -1,0 +1,38 @@
+THE PLOTS CAN BE FOUND IN THE FOLDER NAMED AFTER THE EVENT
+
+-------Answer to a)------------
+To filter our noise we consider a gaussian stationary model. This is justified by the fact that the noise should not depend on time.
+We use a cosine window to make sure our edge have a value of 0 to avoid trouble when taking the FT of the strains, and compute our
+power spectrum and then convolve our spectrum with a gaussian filter. This is done in the fucntion noise found in util.py
+
+-------Answer to b)------------
+To filter our noise we consider a gaussian stationary model. This is justified by the fact that the noise should not depend on time.
+We use a cosine window to make sure our edge have a value of 0 to avoid trouble when taking the FT of the strains, and compute our
+power spectrum and then convolve our spectrum with a gaussian filter. This is done in the fucntion noise found in util.py
+
+-------Answer to c)------------
+The signal to noise ratio is given by m*sqrt((N^0.5*A)^T*(N^0.5*A)).
+More detail can be found in util.py and the plots can be seen in the folders for each events.
+
+-------Answer to d)------------
+We can see that the two ways to find our signal to noise ratios give the same placement for the events.
+However we can see that the amplitude is not exactly the same, and that the shape of the distribution is slightly different.
+This is due to the fact that our noise is probaly not perfectly a gaussian stationary noise.
+
+-------Answer to e)------------
+Here are the frequency for each obseravtory by event:
+	 GW150914 	 LVT151012 	 GW151226 	 GW170104 
+H	 100.25  	 75.8125 	 74.15625	 93.71875 
+L	 115.34375	 94.21875 	 107.0625 	 76.25 
+
+-------Answer to e)------------
+To find the time of the event, we fit a gaussian to our data and consider the mean to be the time
+of the event and the standard deviation to be the error. We assumed 5000km between the detectors and used the speed of light to find
+the error. Here are the resutls:
+			 GW150914 	 LVT151012 	 GW151226 	 GW170104 
+time_H		 15.999688957743547 	 15.999335975235372 	 16.000173314814212	 15.999099611206795 
+err_H		 0.0010313276695563152 	 0.0007260746404977766 	 0.0010892830679616963	 0.0006344362126721046 
+time_L		 16.000488191165378 	 15.999527568252583 	 15.999768499344395	 15.999824378278339 
+err_L		 0.0008388366789358161 	 0.0008990856437862869 	 0.0009894616115627545	 0.0011701339669860796 
+angle_err	 0.04795400530980487	 0.011495581032683333 	 0.024288928189051262 	 0.04348602429264048 
+

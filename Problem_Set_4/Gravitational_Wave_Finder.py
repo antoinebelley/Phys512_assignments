@@ -42,7 +42,6 @@ def grav_wave_finder(event_name, strain_H, strain_L, th, tl, window, dt):
     wd_H = whitenedd(strain_H,noise_H, window, norm_H)
     wd_L = whitenedd(strain_L,noise_L, window, norm_L)
     #Generate the matched_filter and SNR for the event
-
     m_H = matched_filter(wA_H, wd_H)
     m_L = matched_filter(wA_L, wd_L)
     #Plot the matched filters from the event

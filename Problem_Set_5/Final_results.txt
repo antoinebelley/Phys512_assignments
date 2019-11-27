@@ -1,0 +1,29 @@
+-----------Part 1-------
+The relaxation method took 1774 to converge to a precision of 0.05.
+We can see qualitatively in "Part1_potential_relaxation.png" that this is very close to the anlytic potential .
+However, since the analytic potential is a radial solution, it cannot meet the boundary condition of the box
+This explanins why the "analytic" field is really weird when we simply take the gradient of the field given by the analytic formula.
+Therefore, I would trust more the numerical solution since it actually solve for the good b.c
+Furthermore, our numerical charge denisty is exaclty what we would expect, ie the charge is on the outside of the cylinder.
+
+-----------Part 2-------
+The relaxation method took 47 to converge to a precision of 0.05, which is way faster than what we had in one.
+Resulting potential,field and chage distribution are shown in "Part2_Potential_conjugate_gradient.png".
+
+-----------Part 3-------
+The relaxation method took 22 to converge to a precision of 0.05, which is less than in Part 2.
+The interpolation for scipy is relatively slow for large matrices so I am not sure if doing this this way
+actually solves time... This could  although definitely be address and then it would save much time.
+Resulting potential,field and chage distribution are shown in "Part3_field_resolution_increase.png".
+
+-----------Part 4-------
+The field near the bump is enormous compared to the rest of the field as it can be see in "Part4_Field_from_wire_with_bump.png".
+Therefore, a  lot of power is radiated away because of the bump.
+This explains why power companies do not want bumps in their wires.
+
+-----------Part 5-------
+Note that since we are only considering a slab in the middle and that all slab are the same, I solve the problem in 1D.
+We have to define the following constants: dt,dx,k,x_max,t_max.
+While x_max,t_max and C are simply a choice or would be fix by the problem,
+the value of dt,dx and k decide of the stability of the solution. If k*dt/dx**2
+

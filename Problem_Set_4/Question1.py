@@ -10,7 +10,6 @@ from Gravitational_Wave_Finder import grav_wave_finder
 
 
 directory = 'LOSC_Event_tutorial'
-template  = 'GW150914_4_template.hdf5'
 
 
 #Creates an array of the different files

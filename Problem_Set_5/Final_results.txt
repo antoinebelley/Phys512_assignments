@@ -1,5 +1,6 @@
 -----------Part 1-------
 The relaxation method took 1774 to converge to a precision of 0.05.
+The value of lambda on the ring is given by 1.420664076756184e-09.
 We can see qualitatively in "Part1_potential_relaxation.png" that this is very close to the anlytic potential .
 However, since the analytic potential is a radial solution, it cannot meet the boundary condition of the box
 This explanins why the "analytic" field is really weird when we simply take the gradient of the field given by the analytic formula.
@@ -26,4 +27,3 @@ Note that since we are only considering a slab in the middle and that all slab a
 We have to define the following constants: dt,dx,k,x_max,t_max.
 While x_max,t_max and C are simply a choice or would be fix by the problem,
 the value of dt,dx and k decide of the stability of the solution. If k*dt/dx**2
-

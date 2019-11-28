@@ -6,7 +6,7 @@ from util import *
 n=1000
 rad=100
 
-f = open('Final_results.txt','a')
+f = open('Final_results.txt','w')
 
 ################Part 1#########################
 #Initialize the problem
@@ -34,9 +34,15 @@ ax2 = ax[2].pcolormesh(rho)
 fig.colorbar(ax2, ax=ax[2])
 ax[2].set_title('Rho')
 fig.savefig('Part1_potential_relaxation.png')
+#Compute lambda
+rho = rho[np.abs(rho)>1e-10]
+total_charge = np.sum(rho)
+lam = total_charge/(2*np.pi*rad)
+
 #Write the results into the summary file
 f.write('-----------Part 1-------\n')
 f.write(f'The relaxation method took {count} to converge to a precision of 0.05.\n')
+f.write(f'The value of lambda on the ring is given by {lam}.\n')
 f.write('We can see qualitatively in "Part1_potential_relaxation.png" that this is very close to the anlytic potential .\n')
 f.write('However, since the analytic potential is a radial solution, it cannot meet the boundary condition of the box\n')
 f.write('This explanins why the "analytic" field is really weird when we simply take the gradient of the field given by the analytic formula.\n')

@@ -26,4 +26,4 @@ This explains why power companies do not want bumps in their wires.
 Note that since we are only considering a slab in the middle and that all slab are the same, I solve the problem in 1D.
 We have to define the following constants: dt,dx,k,x_max,t_max.
 While x_max,t_max and C are simply a choice or would be fix by the problem,
-the value of dt,dx and k decide of the stability of the solution. If k*dt/dx**2
+the value of dt,dx and k decide of the stability of the solution. If k*dt/dx**2, the solution will converge.

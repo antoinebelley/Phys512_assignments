@@ -156,6 +156,6 @@ f.write('-----------Part 5-------\n')
 f.write('Note that since we are only considering a slab in the middle and that all slab are the same, I solve the problem in 1D.\n')
 f.write('We have to define the following constants: dt,dx,k,x_max,t_max.\n')
 f.write('While x_max,t_max and C are simply a choice or would be fix by the problem,\n')
-f.write('the value of dt,dx and k decide of the stability of the solution. If k*dt/dx**2<1, the solution will converge.\n\n')
+f.write('the value of dt,dx and k decide of the stability of the solution. If k*dt/dx**2<0.5, the solution will converge.\n\n')
 f.close()
 

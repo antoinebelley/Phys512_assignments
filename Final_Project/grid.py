@@ -2,19 +2,9 @@ import numpy as np
 from numba import *
 
 
-#Define the types of the fields of the following class to be able to jit it
-spec = [
-    ('position', float64[:,:]),            
-    ('grid', float64[:,:]), 
-    ('ixy', int64[:,:]),
-    ('mass', float64)
-]
-
-
-@jitclass(spec)
 class ParticleGrid(object):
     """Class to construct the density grid with the particle"""
-    def __init__(self,nparticle,size,mass=1.0, dim=2):
+    def __init__(self,nparticle,grid_size,size,mass=1.0, dim=2):
         """Initialize the class.
         -Arguments: -nparticles (int): The number of particle to run in the simulation
                     -size       (int): Size of the grid
@@ -26,21 +16,34 @@ class ParticleGrid(object):
 
         """
         self.position = np.random.rand(nparticle,dim)*(size-1)
-        self.grid = np.zeros((size,size), dtype = np.float64)
-        self.ixy = np.asarray(np.rint(self.position),dtype=np.int64)
+        self.grid = np.zeros((grid_size,grid_size), dtype = np.float64)
+        self.grid_pos = np.zeros((grid_size,grid_size), dtype = np.float64)
+        self.ixy_pos = np.asarray(np.rint(self.position),dtype=np.int64)
+        self.ixy = np.asarray(np.floor(self.position),dtype=np.int64)
+        self.ixy = np.append(self.ixy,np.asarray(np.ceil(self.position),dtype=np.int64),axis=0)
+        self.ixy = np.append(self.ixy, np.asarray([np.ceil(self.position[:,0]),np.floor(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
+        self.ixy = np.append(self.ixy, np.asarray([np.floor(self.position[:,0]),np.ceil(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.mass = mass
         self.hist_2D()
 
     def hist_2D(self):
         """Creates a 2D histogramm with the density of the particles by adding one to every index where there is a particle on the grid"""
         self.grid = 0*self.grid
-        n = self.position.shape[0]
+        self.grid_pos = 0*self.grid_pos
+        n = self.ixy.shape[0]
         for i in range(n):
-            self.grid[self.ixy[i,0],self.ixy[i,1]]+=self.mass
+            self.grid[self.ixy[i,0],self.ixy[i,1]]+=self.mass/4
+        for i in range(self.ixy_pos.shape[0]):
+            self.grid_pos[self.ixy_pos[i,0],self.ixy_pos[i,1]]+=self.mass
 
     def update_position(self,position):
         """Update the position of the particles on the grid"""
-        self.ixy = np.asarray(np.abs(np.rint(position)),dtype=np.int64)
+        #self.ixy = np.asarray(np.abs(np.rint(position)),dtype=np.int64)
+        self.ixy = np.asarray(np.floor(position),dtype=np.int64)
+        self.ixy = np.append(self.ixy,np.asarray(np.ceil(position),dtype=np.int64),axis=0)
+        self.ixy = np.append(self.ixy, np.asarray([np.ceil(position[:,0]),np.floor(position[:,1])],dtype=np.int64).transpose(),axis=0)
+        self.ixy = np.append(self.ixy, np.asarray([np.floor(position[:,0]),np.ceil(position[:,1])],dtype=np.int64).transpose(),axis=0)
+        self.ixy_pos = np.asarray(np.rint(position),dtype=np.int64)
         self.hist_2D()
        
 
@@ -48,7 +51,7 @@ class ParticleGrid(object):
 def green_function(norms,grid,soft,G):
     soft = soft**2
     norms[norms<soft] = soft
-    norms=norms+soft
+    norms=norms
     green = np.ones(grid.size)
     green = green/norms
     green = green.reshape(grid.shape)

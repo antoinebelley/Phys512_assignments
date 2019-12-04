@@ -24,27 +24,30 @@ class ParticleGrid(object):
         self.ixy = np.append(self.ixy, np.asarray([np.ceil(self.position[:,0]),np.floor(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.ixy = np.append(self.ixy, np.asarray([np.floor(self.position[:,0]),np.ceil(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.mass = mass
-        self.hist_2D()
+        self.update_grid()
 
-    def hist_2D(self):
+    def update_grid(self):
         """Creates a 2D histogramm with the density of the particles by adding one to every index where there is a particle on the grid"""
-        self.grid = 0*self.grid
-        self.grid_pos = 0*self.grid_pos
-        n = self.ixy.shape[0]
-        for i in range(n):
-            self.grid[self.ixy[i,0],self.ixy[i,1]]+=self.mass/4
-        for i in range(self.ixy_pos.shape[0]):
-            self.grid_pos[self.ixy_pos[i,0],self.ixy_pos[i,1]]+=self.mass
+        
+        self.grid, self.grid_posd = hist_2D(self.grid, self.grid_pos,self.ixy,self.ixy_pos,self.mass)
+        # self.grid = 0*self.grid
+        # self.grid_pos = 0*self.grid_pos
+        # n = self.ixy.shape[0]
+        # for i in range(n):
+        #     self.grid[self.ixy[i,0],self.ixy[i,1]]+=self.mass/4
+        # for i in range(self.ixy_pos.shape[0]):
+        #     self.grid_pos[self.ixy_pos[i,0],self.ixy_pos[i,1]]+=self.mass
 
     def update_position(self,position):
         """Update the position of the particles on the grid"""
         #self.ixy = np.asarray(np.abs(np.rint(position)),dtype=np.int64)
+        self.position = position
         self.ixy = np.asarray(np.floor(position),dtype=np.int64)
         self.ixy = np.append(self.ixy,np.asarray(np.ceil(position),dtype=np.int64),axis=0)
         self.ixy = np.append(self.ixy, np.asarray([np.ceil(position[:,0]),np.floor(position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.ixy = np.append(self.ixy, np.asarray([np.floor(position[:,0]),np.ceil(position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.ixy_pos = np.asarray(np.rint(position),dtype=np.int64)
-        self.hist_2D()
+        self.update_grid()
        
 
 @njit
@@ -63,14 +66,14 @@ def norm_on_grid(raveled):
     norm = np.sqrt(raveled[0,]**2+raveled[1,]**2)
     return norm
 
-
-# grid = ParticleGrid(100,1000).grid
-# size = np.arange(1000)
-# xx,yy = np.meshgrid(size,size)
-# vectors = np.array([xx.ravel(),yy.ravel()])
-# norm = norm_on_grid(vectors)
-# green = green_function(norm,grid,1000,0.1,1)
-# import matplotlib.pyplot as plt
-# plt.imshow(grid)
-# plt.show()
-# green_function(100,grid,0.01,1,xx,yy)
+@njit
+def hist_2D(grid, grid_pos,ixy,ixy_pos,mass):
+    """Creates a 2D histogramm with the density of the particles by adding one to every index where there is a particle on the grid"""
+    grid = 0*grid
+    grid_pos = 0*grid_pos
+    n = ixy.shape[0]
+    for i in range(n):
+        grid[ixy[i,0],ixy[i,1]]+=mass/4
+    for i in range(ixy_pos.shape[0]):
+        grid_pos[ixy_pos[i,0],ixy_pos[i,1]]+=mass
+    return grid, grid_pos

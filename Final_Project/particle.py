@@ -27,13 +27,11 @@ class ParticleList():
         return self.nparticles
 
     def evolve(self,acc,acc_new, dt, size, boundary_periodic=True):
-            # print(self.position.shape)
-            # print(self.momentum.shape)
-            # print(acc.shape)
-            # print(acc_new.shape)
             self.position, self.momentum = leap_frog(self.position, self.momentum, acc, acc_new, dt)
             if boundary_periodic == True:
-                self.position=self.position%(size-1)
+                self.position = self.position%(size-1)
+
+
             
 
 
@@ -42,7 +40,7 @@ class ParticleList():
 class NBodySystem():
     """Descrribes the whole system of the nbody particles"""
 
-    def __init__(self,nparticles,size, mass=1, G=1, boundary_periodic = True, softner=0.1, dt = 1, position = None, momentum = None):
+    def __init__(self,nparticles,size, mass=1, G=1, boundary_periodic = True, softner=1, position = [], momentum = []):
         self.parameters = {}
         self.parameters['softener'] = softner
         self.parameters['G'] = G
@@ -50,20 +48,24 @@ class NBodySystem():
         self.parameters['nparticles'] = nparticles
         self.size = size
         self.mass = mass
-        self.dt = dt
         if boundary_periodic==True:
             self.grid_size = size
         else:
             self.grid_size = 4*size
         self.ptclgrid = ParticleGrid(nparticles,self.grid_size,self.size, mass=mass)
+        if len(position) != 0:
+            self.ptclgrid.update_position(position)
         self.grid = self.ptclgrid.grid
         self.grid_pos = self.ptclgrid.grid_pos
         mass = np.ones(nparticles)*1
         x0,y0 = self.ptclgrid.position.transpose()
         initial_condition = np.array([x0,y0, mass]).transpose()
         self.particles = ParticleList(nparticles, initial_condition)
+        if len(momentum) != 0:
+            self.particles.momentum = momentum
         self.compute_green_function(self.grid_size)
         self.acc = np.zeros((len(self),2))
+
 
 
     def __len__(self):
@@ -92,15 +94,15 @@ class NBodySystem():
 
     def grad_phi_mesh(self, phi):
         if self.parameters['boundary_periodic'] == True:
-            fx = -0.5 * (np.roll(phi, 1, axis = 1) - np.roll(phi, -1, axis=1)) 
-            fy = -0.5 * (np.roll(phi, 1, axis = 0) - np.roll(phi, -1, axis=0)) 
+            fy = -0.5 * (np.roll(phi, 1, axis = 1) - np.roll(phi, -1, axis=1)) 
+            fx = -0.5 * (np.roll(phi, 1, axis = 0) - np.roll(phi, -1, axis=0)) 
         else:
-            fx = -0.5 * (phi[2:,1:-1] - phi[0:-2,1:-1])
+            fx = 0.5 * (phi[2:,1:-1] - phi[0:-2,1:-1])
             fx = np.insert(fx,0,0, axis=0)
             fx = np.insert(fx,-1,0,axis=0)
             fx = np.insert(fx,0,0, axis=1)
             fx = np.insert(fx,-1,0,axis=1)
-            fy = -0.5 * (phi[1:-1,2:] - phi[1:-1,:-2])
+            fy = 0.5 * (phi[1:-1,2:] - phi[1:-1,:-2])
             fy = np.insert(fy,0,0, axis=0)
             fy = np.insert(fy,-1,0,axis=0)
             fy = np.insert(fy,0,0,axis=1)
@@ -113,10 +115,10 @@ class NBodySystem():
                      
 
     def energy(self):
-        energy = -0.5*np.sum(self.phi)+0.5*self.mass*np.sum(self.particles.momentum)**2
+        energy = -0.5*np.sum(self.phi)+0.5*self.mass*np.sum(np.sqrt(self.particles.momentum[:,0]**2+self.particles.momentum[:,1]**2))**2
         return energy
 
-    def evolve_system(self):
+    def evolve_system(self,dt, energy_file = None):
         phi = self.compute_field()
         force_m = self.compute_forces_mesh(phi)
         self.acc_new = np.zeros([len(self),2])
@@ -124,42 +126,51 @@ class NBodySystem():
             x,y = self.ptclgrid.ixy[i]
             x = int(x)
             y = int(y)
-            self.acc_new[i][0] += 1/self.mass*force_m[0][x,y]
-            self.acc_new[i][1] += 1/self.mass*force_m[1][x,y]
-        self.particles.evolve(self.acc,self.acc_new,self.dt,self.size, boundary_periodic=self.parameters['boundary_periodic'])
+            self.acc_new[i][0] += (1/self.mass*force_m[0][x,y])
+            self.acc_new[i][1] += (1/self.mass*force_m[1][x,y])
+        self.particles.evolve(self.acc,self.acc_new,dt,self.size, boundary_periodic=self.parameters['boundary_periodic'])
         if self.parameters['boundary_periodic']!=True:
             index = np.argwhere(~(self.particles.position<=self.grid_size-1))
             index2 = np.argwhere(~(self.particles.position>=0))
             index = {a for a in np.append(index,index2)}
             index = list(index)
             self.particles.momentum = np.delete(self.particles.momentum,index,axis=0)
-            self.acc = np.delete(self.particles.position,index,axis=0)
-            self.acc_new = np.delete(self.particles.position,index,axis=0)
+            self.acc = np.delete(self.acc,index,axis=0)
+            self.acc_new = np.delete(self.acc_new,index,axis=0)
             self.particles.position = np.delete(self.particles.position,index,axis=0)
         self.acc = self.acc_new.copy()
         self.ptclgrid.update_position(self.particles.position)
         self.grid = self.ptclgrid.grid
         self.grid_pos = self.ptclgrid.grid_pos
-        print(self.energy())
+        if energy_file != None:
+            energy_file.write(f'{self.energy()}\n')
+            energy_file.flush()
+        #print(self.acc)
         #return forces
+        return self.grid
 
 
 
-if __name__=='__main__':
-    plt.ion()
-    n=int(1e5)
-    size=400
-    system = NBodySystem(n,size, mass=1, boundary_periodic = True)
-    #f = system.evolve_system()
+# if __name__=='__main__':
+#     plt.ion()
+#     n=int(2)
+#     size=300
+#     pos = np.array([[size//2+0.01-10,size//2+0.01],[size//2+10.01,size//2+0.01]])
+#     mom = np.array([[0,0.2],[0,-0.2]])
+#     system = NBodySystem(n,size, mass=5, boundary_periodic = True, position=pos)
+#     #system = NBodySystem(n,size, mass=5, boundary_periodic = True)
+#     #ccsystem.evolve_system()
 
 
-    for i in range(0,10000):
-        #for ii in range(5):
-        system.evolve_system()
-        print('One step')
-        plt.clf()
-        plt.pcolormesh(system.grid_pos[:size,:size])
-        plt.colorbar()
-        #print(system.particles.position[:,0],system.particles.position[:,1])
-        plt.pause(1e-3)
+#     for i in range(0,10000):
+#         #for ii in range(5):
+#         system.evolve_system()
+#         print('One step')
+#         plt.clf()
+#         plt.plot(system.particles.position[:size,:size][:,0],system.particles.position[:size,:size][:,1],'*')
+#         plt.xlim(0,size)
+#         plt.ylim(0,size)
+#         # plt.pcolormesh(system.grid[:size,:size])
+#         # plt.colorbar()
+#         plt.pause(1e-3)
 

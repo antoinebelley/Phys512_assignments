@@ -9,15 +9,9 @@ dt=1
 
 fig = plt.figure()
 ax = fig.add_subplot(111, autoscale_on=False, xlim = (0,size),ylim=(0,size))
-#ax.grid()
+
 
 ptcl, = ax.plot([], [], '*')
-
-# def init():
-#     """initialize animation"""
-#     ptcl.set_data([], [])
-#     return ptcl,
-
 
 def animate(i):
     """perform animation step"""

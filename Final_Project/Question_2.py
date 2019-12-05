@@ -6,7 +6,7 @@ n=int(2)
 size=300
 pos = np.array([[size//2+0.01-10,size//2+0.01],[size//2+10.01,size//2+0.01]])
 mom = np.array([[0,0.17],[0,-0.17]])
-system = NBodySystem(n,size, mass=5, boundary_periodic =False, position=pos,momentum=mom)
+system = NBodySystem(n,size, mass=1, boundary_periodic =False, position=pos,momentum=mom)
 dt=10
 
 fig = plt.figure()

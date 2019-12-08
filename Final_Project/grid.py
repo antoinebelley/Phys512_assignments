@@ -4,7 +4,7 @@ from numba import *
 
 class ParticleGrid(object):
     """Class to construct the density grid with the particle"""
-    def __init__(self,nparticle,grid_size,size,mass, dim=2):
+    def __init__(self,nparticle,grid_size,size,mass,soft, dim=2, early_universe=False):
         """Initialize the class.
         -Arguments: -nparticles (int): The number of particle to run in the simulation
                     -size       (int): Size of the grid
@@ -13,6 +13,8 @@ class ParticleGrid(object):
                     -grid     (array): The grid on which we place the particle
                     -ixy      (array): Position of the particle as integers (for the density)"""
         self.position = np.random.rand(nparticle,dim)*(size-1)
+        self.early=early_universe
+        self.size = grid_size
         self.grid = np.zeros((grid_size,grid_size), dtype = np.float64)
         self.grid_pos = np.zeros((grid_size,grid_size), dtype = np.float64)
         self.ixy_pos = np.asarray(np.rint(self.position),dtype=np.int64)
@@ -21,12 +23,23 @@ class ParticleGrid(object):
         self.ixy = np.append(self.ixy, np.asarray([np.ceil(self.position[:,0]),np.floor(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.ixy = np.append(self.ixy, np.asarray([np.floor(self.position[:,0]),np.ceil(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.mass = mass
+        if early_universe == True:
+            kx = np.fft.fftfreq(grid_size)
+            ky = np.fft.fftfreq(grid_size)
+            xx,yy = np.meshgrid(kx,ky)
+            k = np.array([xx.ravel(), yy.ravel()])
+            k = norm_on_grid(k)
+            k[k<soft]=soft
+            self.k = k.reshape(self.grid.shape)
         self.update_grid()
 
     def update_grid(self):
         """Creates a 2D histogramm with the density of the particles by adding using a CIC like model. For
         perfomrance purposes, it calls the compiled fucnction hist_2D which is compiled using numba"""
         self.grid, self.grid_pos = hist_2D(self.grid, self.grid_pos,self.ixy,self.ixy_pos,self.mass)
+        if self.early == True:
+             self.grid = np.real(np.fft.ifft2(np.fft.fft2(self.grid)/self.k**3))
+
 
     def update_position(self,position, mass):
         """Update the position of the particles on the grid
@@ -40,13 +53,17 @@ class ParticleGrid(object):
         self.ixy_pos = np.asarray(np.rint(position),dtype=np.int64)
         self.update_grid()
 
-    def early_universe_grid(self):
-        """Creates a 2D histogramm with the density of the particles by adding using a CIC like model and the distribution from the early universe."""
-        norms = norm_on_grid(self.ixy_pos.transpose())
-        norms[norms>1000]=1
-        mass = (norms**(-3))
-        self.mass = mass
-        self.grid, self.grid_pos = hist_2D(self.grid, self.grid_pos,self.ixy,self.ixy_pos,self.mass)
+    # def early_universe_grid(self,soft):
+    #     """Creates a 2D histogramm with the density of the particles by adding using a CIC like model and the distribution from the early universe."""
+    #     kx = np.fft.fftfreq(self.size)
+    #     ky = np.fft.fftfreq(self.size)
+    #     xx,yy = np.meshgrid(kx,ky)
+    #     k = np.array([xx.ravel(), yy.ravel()])
+    #     k = norm_on_grid(k)
+    #     k[k<soft]=soft
+    #     k = k.reshape(self.grid.shape)
+    #     self.grid, self.grid_pos = hist_2D(self.grid, self.grid_pos,self.ixy,self.ixy_pos,self.mass)
+       
         
 
 
@@ -70,7 +87,7 @@ def green_function(norms,grid,soft,G):
     return green
 
 
-@njit
+# @njit
 def norm_on_grid(raveled):
     """Computes the norm of a list of vector
     -Arguments: - raveled (array): Array containing the x and y coord of each vector

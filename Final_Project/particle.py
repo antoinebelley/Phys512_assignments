@@ -121,13 +121,14 @@ class NBodySystem():
         else:
             self.grid_size = 2*size
         #Initialize the partticle grid
-        self.ptclgrid = ParticleGrid(nparticles,self.grid_size,self.size, mass=self.mass)
+        # if early_universe == True:
+        #     self.ptclgrid.early_universe_grid(softner)
+        #     self.mass = self.ptclgrid.mass
+        self.ptclgrid = ParticleGrid(nparticles,self.grid_size,self.size, mass=self.mass, soft=softner, early_universe=early_universe)
         #If initial position are givem, place the particle to the right place on the grid
         if len(position) != 0:
-            self.ptclgrid.update_position(position)
-        if early_universe == True:
-            self.ptclgrid.early_universe_grid()
-            self.mass = self.ptclgrid.mass
+            self.ptclgrid.update_position(position, mass)
+
         self.grid = self.ptclgrid.grid
         self.grid_pos = self.ptclgrid.grid_pos
         x0,y0 = self.ptclgrid.position.transpose()
@@ -168,8 +169,9 @@ class NBodySystem():
         self.green = green
 
     def compute_field(self):
+        green_fft = np.fft.fft2(self.green)
         """Compute the field on the grid by taking the convolution of the denisty on the grid and the green fucntion."""
-        phi = np.real(np.fft.ifft2(np.fft.fft2(self.grid)*np.fft.fft2(self.green)))
+        phi = np.real(np.fft.ifft2(np.fft.fft2(self.grid)*green_fft))
         self.phi = phi[:self.size,:self.size] #This is the green function only where particle lives. Only useful for non-periodic bc
         if self.boundary_periodic != True:
           self.phi[0:,0]=0

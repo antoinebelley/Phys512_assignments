@@ -30,13 +30,8 @@ plt.colorbar(ptcl)
 def animate(i):
     """perform animation step"""
     global system, ax, fig, dt, f
-    system.evolve_system(dt)
-    min_lim = system.grid_pos[system.grid_pos>0].min()
-    max_lim = system.grid_pos.max()
-    sys = system.grid_pos.copy()
-    sys[sys==0] = min_lim*1e-3
-    # ptcl.set_data(sys)
-    # ptcl.set_norm(LogNorm(vmin=min_lim, vmax=max_lim))
+    for i in range(10):
+        system.evolve_system(dt)
     ptcl.set_data(system.grid_pos)
     ptcl.set_clim(vmin=system.grid_pos.min(), vmax=system.grid_pos.max())
     ptcl.set_cmap(plt.get_cmap('inferno'))
@@ -45,7 +40,7 @@ def animate(i):
 
 
 
-ani = animation.FuncAnimation(fig, animate, frames=3000,
+ani = animation.FuncAnimation(fig, animate, frames=1000,
                               interval=10)
 
 # plt.show()

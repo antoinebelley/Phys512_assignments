@@ -26,21 +26,24 @@ plt.colorbar(ptcl)
 
 
 
-
+count=0
 def animate(i):
     """perform animation step"""
+    global count
+    print(count)
     global system, ax, fig, dt, f
     for i in range(10):
         system.evolve_system(dt)
     ptcl.set_data(system.grid_pos)
     ptcl.set_clim(vmin=system.grid_pos.min(), vmax=system.grid_pos.max())
     ptcl.set_cmap(plt.get_cmap('inferno'))
+    count+=1
     return ptcl,
 
 
 
 
-ani = animation.FuncAnimation(fig, animate, frames=1000,
+ani = animation.FuncAnimation(fig, animate, frames=500,
                               interval=10)
 
 # plt.show()

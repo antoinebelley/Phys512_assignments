@@ -24,21 +24,22 @@ class ParticleGrid(object):
         self.ixy = np.append(self.ixy, np.asarray([np.floor(self.position[:,0]),np.ceil(self.position[:,1])],dtype=np.int64).transpose(),axis=0)
         self.mass = mass
         if early_universe == True:
-            kx = np.fft.fftfreq(grid_size)
-            ky = np.fft.fftfreq(grid_size)
-            xx,yy = np.meshgrid(kx,ky)
-            k = np.array([xx.ravel(), yy.ravel()])
+            kx = np.real(np.fft.fft(self.ixy_pos[:,0]))
+            ky = np.real(np.fft.fft(self.ixy_pos[:,1]))
+            #xx,yy = np.meshgrid(kx,ky)
+            k = np.array([kx, ky])
             k = norm_on_grid(k)
             k[k<soft]=soft
-            self.k = k.reshape(self.grid.shape)
+            #self.k = k.reshape(self.grid.shape)
+            self.mass *= (1/k**3)
         self.update_grid()
 
     def update_grid(self):
         """Creates a 2D histogramm with the density of the particles by adding using a CIC like model. For
         perfomrance purposes, it calls the compiled fucnction hist_2D which is compiled using numba"""
         self.grid, self.grid_pos = hist_2D(self.grid, self.grid_pos,self.ixy,self.ixy_pos,self.mass)
-        if self.early == True:
-             self.grid = np.real(np.fft.ifft2(np.fft.fft2(self.grid)/self.k**3))
+        # if self.early == True:
+        #      self.grid = np.real(np.fft.ifft2(np.fft.fft2(self.grid)/self.k**3))
 
 
     def update_position(self,position, mass):

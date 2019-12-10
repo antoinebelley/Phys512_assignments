@@ -30,4 +30,4 @@ Part 4
 ------
 
 When assigning an initial mass density of k^-3, we get more stable structure formed then when starting with a uniform distribution. This is because some places
-on the grid already have a higher density at those point. This can be seen in [Part4_periodic_soft=0.8_dt=1_n=300000_size=500.gif](https://github.com/antoinebelley/Phys512_assignments/blob/master/Final_Project/Part4_periodic_soft=0.8_dt=1_n=300000_size=500.gif).
+on the grid already have a higher density at those point. This can be seen in [Part4_periodic_soft=0.8_dt=1_n=300000_size=500.gif](https://github.com/antoinebelley/Phys512_assignments/blob/master/Final_Project/Part4_periodic_soft%3D0.8_dt%3D1_n%3D300000_size%3D500_density-k%5E-3.gif).
